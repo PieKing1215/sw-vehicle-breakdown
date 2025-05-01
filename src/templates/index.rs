@@ -5,10 +5,7 @@ use perseus::prelude::*;
 use serde::{Deserialize, Serialize};
 use sycamore::prelude::*;
 use wasm_bindgen_futures::JsFuture;
-use web_sys::{
-    wasm_bindgen::JsCast,
-    DragEvent,
-};
+use web_sys::{wasm_bindgen::JsCast, DragEvent};
 
 use crate::data::{Definition, Vehicle};
 
@@ -106,7 +103,7 @@ fn index_page<'a, G: Html>(cx: BoundedScope<'_, 'a>, state: &'a IndexPageStateRx
                             } else {
                                 counts.mass_mult += 1;
                             }
-                            
+
                             map
                         });
 
@@ -284,7 +281,8 @@ async fn get_build_state(_info: StateGeneratorInfo<()>) -> IndexPageState {
     let rom = std::env!("ROM_DIR");
 
     let mut definitions = HashMap::new();
-    for entry in std::fs::read_dir(std::path::PathBuf::from(rom).join("data/definitions")).unwrap() {
+    for entry in std::fs::read_dir(std::path::PathBuf::from(rom).join("data/definitions")).unwrap()
+    {
         let entry = entry.unwrap();
         let id = entry
             .path()

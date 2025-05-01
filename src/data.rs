@@ -61,10 +61,16 @@ pub struct MicrocontrollerDef {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename = "definition")]
 pub struct Definition {
-    #[serde(rename = "@value", deserialize_with="serde_aux::field_attributes::deserialize_number_from_string")]
+    #[serde(
+        rename = "@value",
+        deserialize_with = "serde_aux::field_attributes::deserialize_number_from_string"
+    )]
     pub value: u32,
     #[serde(rename = "@name")]
     pub name: String,
-    #[serde(rename = "@mass", deserialize_with="serde_aux::field_attributes::deserialize_number_from_string")]
+    #[serde(
+        rename = "@mass",
+        deserialize_with = "serde_aux::field_attributes::deserialize_number_from_string"
+    )]
     pub mass: f32,
 }
