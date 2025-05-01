@@ -46,8 +46,6 @@ jobs:
     - id: get-url
       uses: TuftsRT/get-pages-url@v1.0.1
 
-    - run: echo "${{ steps.get-url.outputs.url }}"
-    
     - name: Perseus Export
       run: ROM_DIR=~/Steam_root/rom PERSEUS_BASE_PATH="${{ steps.get-url.outputs.url }}" perseus deploy -e
 
