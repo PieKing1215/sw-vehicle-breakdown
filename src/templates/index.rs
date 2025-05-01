@@ -1,4 +1,4 @@
-use std::{cmp::Ordering, collections::HashMap, path::PathBuf};
+use std::{cmp::Ordering, collections::HashMap};
 
 use chrono::{DateTime, Utc};
 use perseus::prelude::*;
@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 use sycamore::prelude::*;
 use wasm_bindgen_futures::JsFuture;
 use web_sys::{
-    wasm_bindgen::{prelude::Closure, JsCast},
+    wasm_bindgen::JsCast,
     DragEvent,
 };
 
@@ -22,18 +22,18 @@ struct IndexPageState {
 }
 
 fn index_page<'a, G: Html>(cx: BoundedScope<'_, 'a>, state: &'a IndexPageStateRx) -> View<G> {
-    let definitions = state.definitions.get();
-    let map: View<G> = View::new_fragment(
-        definitions
-            .iter()
-            .map(|(k, v)| (k.clone(), v.clone()))
-            .map(|(k, v)| {
-                view! { cx,
-                    p { (format!("{k}: {v:?}")) }
-                }
-            })
-            .collect(),
-    );
+    // let definitions = state.definitions.get();
+    // let map: View<G> = View::new_fragment(
+    //     definitions
+    //         .iter()
+    //         .map(|(k, v)| (k.clone(), v.clone()))
+    //         .map(|(k, v)| {
+    //             view! { cx,
+    //                 p { (format!("{k}: {v:?}")) }
+    //             }
+    //         })
+    //         .collect(),
+    // );
 
     let cx_drop = cx.clone();
     let handle_drop = move |eve: web_sys::Event| {
@@ -102,7 +102,7 @@ fn index_page<'a, G: Html>(cx: BoundedScope<'_, 'a>, state: &'a IndexPageStateRx
                             counts.count += 1;
 
                             if let Some(mc) = &cmp.origin.microprocessor_definition {
-                                counts.mass_mult += (mc.width as u32 * mc.length as u32);
+                                counts.mass_mult += mc.width as u32 * mc.length as u32;
                             } else {
                                 counts.mass_mult += 1;
                             }
@@ -141,9 +141,7 @@ fn index_page<'a, G: Html>(cx: BoundedScope<'_, 'a>, state: &'a IndexPageStateRx
 
                         let sorted = create_signal(cx, sorted);
                         let vehicle_total_cost = create_memo(cx, || sorted.get().iter().map(|c| c.3.unwrap_or_default()).sum::<u32>());
-                        let vehicle_total_cost2 = vehicle_total_cost.clone();
                         let vehicle_total_mass = create_memo(cx, || sorted.get().iter().map(|c| c.5.unwrap_or_default()).sum::<f32>());
-                        let vehicle_total_mass2 = vehicle_total_mass.clone();
 
                         view! { cx,
                             p {
@@ -206,8 +204,8 @@ fn index_page<'a, G: Html>(cx: BoundedScope<'_, 'a>, state: &'a IndexPageStateRx
                                 Indexed (
                                     iterable = sorted,
                                     view = move |cx, (component, count, cost_per, total_cost, mass_per, total_mass)| {
-                                        let fract_cost = total_cost.map(|c| c as f32 / *vehicle_total_cost2.get() as f32);
-                                        let fract_mass = total_mass.map(|c| c / *vehicle_total_mass2.get());
+                                        let fract_cost = total_cost.map(|c| c as f32 / *vehicle_total_cost.get() as f32);
+                                        let fract_mass = total_mass.map(|c| c / *vehicle_total_mass.get());
 
                                         view! { cx,
                                             tr {
@@ -286,7 +284,7 @@ async fn get_build_state(_info: StateGeneratorInfo<()>) -> IndexPageState {
     let rom = std::env!("ROM_DIR");
 
     let mut definitions = HashMap::new();
-    for entry in std::fs::read_dir(PathBuf::from(rom).join("data/definitions")).unwrap() {
+    for entry in std::fs::read_dir(std::path::PathBuf::from(rom).join("data/definitions")).unwrap() {
         let entry = entry.unwrap();
         let id = entry
             .path()
