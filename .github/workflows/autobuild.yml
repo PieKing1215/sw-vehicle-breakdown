@@ -15,7 +15,7 @@ jobs:
     - uses: actions/checkout@v4
     - uses: actions/cache@v4.2.3
       with:
-        path: Steam
+        path: ~/Steam
         key: "steam-cache"
 
     - name: Setup SteamCMD
@@ -27,13 +27,16 @@ jobs:
         steam_config_vdf: ${{ secrets.STEAM_CONFIG_VDF }}
         steam_username: ${{ secrets.STEAM_USERNAME }}
 
+    - name: mkdir
+      run: ~/Steam
+
     - name: Update Game
-      run: steamcmd +@sSteamCmdForcePlatformType windows +force_install_dir ./Steam/ +login ${{ secrets.STEAM_USERNAME }} +app_update 573090 +quit
+      run: steamcmd +@sSteamCmdForcePlatformType windows +force_install_dir ~/Steam +login ${{ secrets.STEAM_USERNAME }} +app_update 573090 +quit
 
     - name: pwd
       run: pwd
     - name: tree
-      run: tree
+      run: tree ~/Steam
     
     - uses: baptiste0928/cargo-install@v3.3.0
       with:
