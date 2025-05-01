@@ -40,8 +40,9 @@ jobs:
         crate: perseus-cli
         version: 0.4.2
 
+    - run: echo "${{ steps.deployment.outputs.page_url }}"
     - name: Perseus Export
-      run: ROM_DIR=~/Steam_root/rom perseus deploy -e
+      run: ROM_DIR=~/Steam_root/rom PERSEUS_BASE_PATH="${{ steps.deployment.outputs.page_url }}" perseus deploy -e
 
     - uses: actions/upload-pages-artifact@v3.0.1
       with:
