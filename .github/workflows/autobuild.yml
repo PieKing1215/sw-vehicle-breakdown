@@ -13,6 +13,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - uses: actions/cache@v4.2.3
+      with:
+        path: Steam
+        key: "steam-cache"
 
     - name: Setup SteamCMD
       uses: Lordfirespeed/setup-steamcmd@v2.0.2
@@ -23,8 +27,13 @@ jobs:
         steam_config_vdf: ${{ secrets.STEAM_CONFIG_VDF }}
         steam_username: ${{ secrets.STEAM_USERNAME }}
 
-    - name: Check steamcmd login
-      run: steamcmd +login ${{ secrets.STEAM_USERNAME }} +quit
+    - name: Update Game
+      run: steamcmd +force_install_dir ./Steam/ +login ${{ secrets.STEAM_USERNAME }} +app_update 573090 +quit
+
+    - name: pwd
+      run: pwd
+    - name: tree
+      run: tree
     
     - uses: baptiste0928/cargo-install@v3.3.0
       with:
