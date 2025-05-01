@@ -1,0 +1,32 @@
+name: Rust
+
+on:
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup SteamCMD
+      uses: Lordfirespeed/setup-steamcmd@v2.0.2
+
+    - name: Populate SteamCMD profile config
+      uses: Lordfirespeed/auth-steamcmd@v1.0.1
+      with:
+        steam_config_vdf: ${{ secrets.STEAM_CONFIG_VDF }}
+        steam_username: ${{ secrets.STEAM_USERNAME }}
+
+    - name: Check steamcmd login
+      run: steamcmd +login ${{ secrets.STEAM_USERNAME }} +quit
+    
+    - uses: baptiste0928/cargo-install@v3.3.0
+      with:
+        crate: perseus-cli
+        version: 0.4.2
