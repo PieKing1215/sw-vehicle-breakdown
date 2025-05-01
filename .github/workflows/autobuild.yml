@@ -28,7 +28,7 @@ jobs:
         steam_username: ${{ secrets.STEAM_USERNAME }}
 
     - name: Update Game
-      run: SteamCMD_FORCE_PLATFORM_TYPE=windows steamcmd +force_install_dir ./Steam/ +login ${{ secrets.STEAM_USERNAME }} +app_update 573090 +quit
+      run: steamcmd +@sSteamCmdForcePlatformType windows +force_install_dir ./Steam/ +login ${{ secrets.STEAM_USERNAME }} +app_update 573090 +quit
 
     - name: pwd
       run: pwd
