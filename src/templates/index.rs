@@ -277,6 +277,7 @@ fn head(cx: Scope, _props: IndexPageState) -> View<SsrNode> {
     view! { cx,
         title { "Stormworks Vehicle Breakdown" }
         link(rel = "stylesheet", href = ".perseus/static/index.css") {}
+        meta(name = "darkreader-lock") {}
     }
 }
 

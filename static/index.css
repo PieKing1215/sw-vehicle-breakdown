@@ -4,6 +4,14 @@ body,#root,#main {
     height: 100vh;
 }
 
+body {
+    background-color: #181818;
+}
+
+* {
+    color: #ddd;
+}
+
 #main {
     overflow: auto;
     padding: 2vw;
@@ -18,18 +26,20 @@ body,#root,#main {
     flex-direction: column;
     flex-grow: 1;
 }
+
 table {
     border-spacing: 0;
-    border-bottom: 0;
-    border-left: 0;
+    border-bottom: 0 !important;
+    border-left: 0 !important;
 }
 
 table, th, td {
-    border: 1px solid #ccc;
+    border: 1px solid #555;
 }
 
 th {
     cursor: pointer;
+    background-color: #282828;
 }
 
 td, th {
@@ -44,4 +54,17 @@ td, th {
 
 #grow-vertical {
     flex-grow: 1;
+}
+
+p {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+#content > p {
+    text-align: center;
+}
+
+#content > table {
+    margin-top: 8px;
 }
