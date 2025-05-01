@@ -40,7 +40,8 @@ jobs:
         crate: perseus-cli
         version: 0.4.2
 
-    - uses: TuftsRT/get-pages-url@v1.0.1
+    - id: get-url
+      uses: TuftsRT/get-pages-url@v1.0.1
 
     - run: echo "${{ steps.get-url.outputs.url }}"
     
