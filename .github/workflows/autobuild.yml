@@ -1,4 +1,4 @@
-name: Rust
+name: Build & Deploy
 
 on:
   workflow_dispatch:
@@ -49,7 +49,7 @@ jobs:
       uses: TuftsRT/get-pages-url@v1.0.1
 
     - name: Perseus Export
-      run: ROM_DIR=~/Steam_root/rom PERSEUS_BASE_PATH="${{ steps.get-url.outputs.url }}" perseus deploy -e
+      run: ROM_DIR=~/Steam_root/rom PERSEUS_BASE_PATH="${{ steps.get-url.outputs.url }}" perseus deploy -e --verbose
 
     - uses: actions/upload-pages-artifact@v3.0.1
       with:
