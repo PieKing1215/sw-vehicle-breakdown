@@ -1,0 +1,15 @@
+# vscode
+.vscode/*
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# rust
+/target
+rustc-ice-*.txt
+
+# perseus
+dist/
+.perseus/
+
+# secrets
+.env
