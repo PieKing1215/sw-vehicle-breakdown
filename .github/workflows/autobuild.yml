@@ -40,7 +40,7 @@ jobs:
 
     - uses: Swatinem/rust-cache@v2.7.8
       with:
-        cache-directories: ".perseus\n~/.rustup"
+        cache-directories: "dist/target_engine\ndist/target_wasm\n~/.rustup"
         cache-all-crates: true
 
     - uses: baptiste0928/cargo-install@v3.3.0
