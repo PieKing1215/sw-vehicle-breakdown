@@ -28,7 +28,7 @@ jobs:
         steam_username: ${{ secrets.STEAM_USERNAME }}
 
     - name: mkdir
-      run: ~/Steam
+      run: mkdir ~/Steam
 
     - name: Update Game
       run: steamcmd +@sSteamCmdForcePlatformType windows +force_install_dir ~/Steam +login ${{ secrets.STEAM_USERNAME }} +app_update 573090 +quit
