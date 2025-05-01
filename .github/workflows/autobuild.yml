@@ -54,6 +54,8 @@ jobs:
     - name: Perseus Export
       run: ROM_DIR=~/Steam_root/rom PERSEUS_BASE_PATH="${{ steps.get-url.outputs.url }}" perseus deploy -e --verbose
 
+    - run: tree ~/
+
     - uses: actions/upload-pages-artifact@v3.0.1
       with:
         path: pkg/
