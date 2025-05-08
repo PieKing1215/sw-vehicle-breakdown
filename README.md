@@ -2,9 +2,9 @@
 
 https://pieking1215.github.io/sw-vehicle-breakdown/
 
-Web tool for creating price/mass breakdowns for Vehicles from [Stormworks: Build and Rescue](https://store.steampowered.com/app/573090/Stormworks_Build_and_Rescue/).
+Web tool for creating cost/mass breakdowns for Vehicles from [Stormworks: Build and Rescue](https://store.steampowered.com/app/573090/Stormworks_Build_and_Rescue/).
 
-You can drag and drop or select a vehicle XML file, and it'll generate a table of the count, price, and mass of every component used in your vehicle.<br/>
+You can drag and drop or select a vehicle XML file, and it'll generate a table of the count, cost, and mass of every component used in your vehicle.<br/>
 Once it's loaded you can click the column titles to sort by that column.<br/>
 *(this is all calculated in your browser, there's no uploading or server or anything)*
 
