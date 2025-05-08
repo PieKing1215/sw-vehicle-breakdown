@@ -5,7 +5,7 @@ use perseus::prelude::*;
 use serde::{Deserialize, Serialize};
 use sycamore::prelude::*;
 use wasm_bindgen_futures::JsFuture;
-use web_sys::{wasm_bindgen::JsCast, DragEvent};
+use web_sys::{wasm_bindgen::JsCast, DragEvent, HtmlInputElement};
 
 use crate::data::{Definition, Vehicle};
 
@@ -33,6 +33,41 @@ fn index_page<'a, G: Html>(cx: BoundedScope<'_, 'a>, state: &'a IndexPageStateRx
     // );
 
     let cx_drop = cx.clone();
+
+    let load_file = move |file: web_sys::File| {
+        state.status.set(format!("Loading {}", file.name()));
+
+        let status = state.status.clone();
+        let vehicle_rc = state.vehicle.clone();
+
+        spawn_local_scoped(cx_drop, async move {
+            let res = JsFuture::from(file.text()).await;
+
+            match res {
+                Err(e) => {
+                    status.set(format!("Error loading file: {e:?}"));
+                    vehicle_rc.set(None);
+                },
+                Ok(text) => {
+                    let text = text.as_string().unwrap();
+
+                    let vehicle_de = quick_xml::de::from_str(&text);
+
+                    match vehicle_de {
+                        Err(e) => {
+                            status.set(format!("Error parsing file: {e:?}"));
+                            vehicle_rc.set(None);
+                        },
+                        Ok(vehicle) => {
+                            status.set(format!("Breakdown for '{}'", file.name()));
+                            vehicle_rc.set(Some(vehicle));
+                        },
+                    }
+                },
+            }
+        });
+    };
+
     let handle_drop = move |eve: web_sys::Event| {
         eve.prevent_default();
         let drag = eve.dyn_ref::<DragEvent>().unwrap();
@@ -42,41 +77,28 @@ fn index_page<'a, G: Html>(cx: BoundedScope<'_, 'a>, state: &'a IndexPageStateRx
                 let item = items.get(i).unwrap();
                 if item.kind() == "file" && item.type_() == "text/xml" {
                     let file = item.get_as_file().unwrap().unwrap();
-                    state.status.set(format!("Loading {}", file.name()));
-
-                    let status = state.status.clone();
-                    let vehicle_rc = state.vehicle.clone();
-
-                    spawn_local_scoped(cx_drop, async move {
-                        let res = JsFuture::from(file.text()).await;
-
-                        match res {
-                            Err(e) => {
-                                status.set(format!("Error loading file: {e:?}"));
-                                vehicle_rc.set(None);
-                            },
-                            Ok(text) => {
-                                let text = text.as_string().unwrap();
-
-                                let vehicle_de = quick_xml::de::from_str(&text);
-
-                                match vehicle_de {
-                                    Err(e) => {
-                                        status.set(format!("Error parsing file: {e:?}"));
-                                        vehicle_rc.set(None);
-                                    },
-                                    Ok(vehicle) => {
-                                        status.set(format!("Finished {}", file.name()));
-                                        vehicle_rc.set(Some(vehicle));
-                                    },
-                                }
-                            },
-                        }
-                    });
+                    load_file(file);
                     break;
                 }
             }
         }
+    };
+
+    let handle_file_change = move |eve: web_sys::Event| {
+        state.status.set(format!("{eve:?} {}", eve.type_()));
+        let Some(target) = eve.target() else {
+            return;
+        };
+
+        if let Some(file) = target
+            .dyn_ref::<HtmlInputElement>()
+            .unwrap()
+            .files()
+            .unwrap()
+            .get(0)
+        {
+            load_file(file);
+        };
     };
 
     view! { cx,
@@ -88,6 +110,21 @@ fn index_page<'a, G: Html>(cx: BoundedScope<'_, 'a>, state: &'a IndexPageStateRx
             },
         ) {
             div (id = "content") {
+                div (id = "input_row") {
+                    p { "Drag a vehicle XML file or"}
+                    input (
+                        id = "input_file",
+                        type = "file",
+                        accept = ".xml",
+                        on:change = handle_file_change,
+                    ) { }
+                    input (
+                        id = "input_button",
+                        type = "button",
+                        value = "Browse",
+                        onclick = "document.getElementById('input_file').click();",
+                    ) {}
+                }
                 p { (state.status.get()) }
                 ({
                     let vehicle = state.vehicle.get();
@@ -301,7 +338,7 @@ async fn get_build_state(_info: StateGeneratorInfo<()>) -> IndexPageState {
 
     IndexPageState {
         rom_date: Utc::now(),
-        status: "Drag a vehicle file".to_string(),
+        status: "Waiting for file...".to_string(),
         definitions,
         vehicle: None,
     }
