@@ -181,8 +181,8 @@ fn index_page<'a, G: Html>(cx: BoundedScope<'_, 'a>, state: &'a IndexPageStateRx
                             p {
                                 (format!("Total Cost: ${vehicle_total_cost}"))
                             }
-                            p {
-                                (format!("Total Mass: {vehicle_total_mass:.1}"))
+                            p (title = "Not including fluids in tanks. Certain propellers also add a phantom 10 mass in the ingame editor total that isn't real.") {
+                                (format!("Total Mass: {vehicle_total_mass:.1}*"))
                             }
                             table {
                                 tr {
