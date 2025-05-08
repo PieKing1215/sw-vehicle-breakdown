@@ -59,7 +59,7 @@ fn index_page<'a, G: Html>(cx: BoundedScope<'_, 'a>, state: &'a IndexPageStateRx
                             vehicle_rc.set(None);
                         },
                         Ok(vehicle) => {
-                            status.set(format!("Breakdown for '{}'", file.name()));
+                            status.set(format!("Breakdown for '{}':", file.name()));
                             vehicle_rc.set(Some(vehicle));
                         },
                     }
@@ -110,22 +110,22 @@ fn index_page<'a, G: Html>(cx: BoundedScope<'_, 'a>, state: &'a IndexPageStateRx
             },
         ) {
             div (id = "content") {
-                div (id = "input_row") {
+                div (id = "input-row") {
                     p { "Drag a vehicle XML file or"}
                     input (
-                        id = "input_file",
+                        id = "input-file",
                         type = "file",
                         accept = ".xml",
                         on:change = handle_file_change,
                     ) { }
                     input (
-                        id = "input_button",
+                        id = "input-button",
                         type = "button",
                         value = "Browse",
-                        onclick = "document.getElementById('input_file').click();",
+                        onclick = "document.getElementById('input-file').click();",
                     ) {}
                 }
-                p { (state.status.get()) }
+                p (id = "status") { (state.status.get()) }
                 ({
                     let vehicle = state.vehicle.get();
                     let vehicle_components = vehicle.as_ref().as_ref().map(|vehicle| {
@@ -296,8 +296,34 @@ fn index_page<'a, G: Html>(cx: BoundedScope<'_, 'a>, state: &'a IndexPageStateRx
                 //     (map)
                 // }
                 p (id = "grow-vertical") {}
-                p {
-                    (format!("Rom data built {}", state.rom_date.get().format("%B %-e %Y")))
+                div (class = "footer-row") {
+                    p {
+                        (format!("Rom data built {}", state.rom_date.get().format("%B %-e %Y")))
+                    }
+                    div (class = "vertical-separator")
+                    a (
+                        href = "https://github.com/PieKing1215/sw-vehicle-breakdown/issues",
+                        target="_blank",
+                        rel="noopener noreferrer",
+                    ) {
+                        "Issues"
+                    }
+                    div (class = "vertical-separator")
+                    a (
+                        href = "https://github.com/PieKing1215/sw-vehicle-breakdown",
+                        target="_blank",
+                        rel="noopener noreferrer",
+                    ) {
+                        "Source"
+                    }
+                    div (class = "vertical-separator")
+                    a (
+                        href = "https://ko-fi.com/pieking1215",
+                        target="_blank",
+                        rel="noopener noreferrer",
+                    ) {
+                        "Support Me :)"
+                    }
                 }
             }
         }
@@ -307,7 +333,7 @@ fn index_page<'a, G: Html>(cx: BoundedScope<'_, 'a>, state: &'a IndexPageStateRx
 #[engine_only_fn]
 fn head(cx: Scope, _props: IndexPageState) -> View<SsrNode> {
     view! { cx,
-        title { "Stormworks Vehicle Breakdown" }
+        title { "SW Vehicle Breakdown" }
         link(rel = "stylesheet", href = ".perseus/static/index.css") {}
         meta(name = "darkreader-lock") {}
     }

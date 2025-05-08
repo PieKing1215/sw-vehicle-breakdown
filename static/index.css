@@ -52,10 +52,6 @@ td, th {
     border-right: 0;
 }
 
-#grow-vertical {
-    flex-grow: 1;
-}
-
 p {
     margin-top: 8px;
     margin-bottom: 8px;
@@ -69,17 +65,47 @@ p {
     margin-top: 8px;
 }
 
-#input_row {
+#input-row {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
 }
 
-#input_file {
+#input-file {
     display: none;
 }
 
-#input_button {
+#input-button {
     color: #282828;
+}
+
+#status {
+    color: #aaa;
+}
+
+#grow-vertical {
+    flex-grow: 1;
+    min-height: 10px;
+}
+
+.footer-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.footer-row * {
+    color: #aaa;
+}
+
+.vertical-separator {
+    height: calc(100% - 16px);
+    width: 1px;
+    border-left: 1px solid #555;
+}
+
+a:hover {
+    opacity: 0.8;
 }
