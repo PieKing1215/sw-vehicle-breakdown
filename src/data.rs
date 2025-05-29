@@ -63,7 +63,8 @@ pub struct MicrocontrollerDef {
 pub struct Definition {
     #[serde(
         rename = "@value",
-        deserialize_with = "serde_aux::field_attributes::deserialize_number_from_string"
+        deserialize_with = "serde_aux::field_attributes::deserialize_number_from_string",
+        default
     )]
     pub value: u32,
     #[serde(rename = "@name")]

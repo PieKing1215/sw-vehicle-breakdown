@@ -357,7 +357,7 @@ async fn get_build_state(_info: StateGeneratorInfo<()>) -> IndexPageState {
 
         let text = std::fs::read_to_string(entry.path()).unwrap();
 
-        let def: Definition = quick_xml::de::from_str(&text).unwrap();
+        let def: Definition = quick_xml::de::from_str(&text).expect(&id);
 
         definitions.insert(id, def);
     }
